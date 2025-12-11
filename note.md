@@ -83,7 +83,7 @@ http://localhost:3000/js/app.js
 http://localhost:3000/images/bg.png
 http://localhost:3000/hello.html
 
-+, Để tạo tiền tố đường dẫn ảo (trong đó đường dẫn thực tế không tồn tại trong hệ thống tệp) cho các tệp được phục vụ bởi express.statichàm, hãy chỉ định đường dẫn gắn kết cho thư mục tĩnh như được hiển thị bên dưới:
++, Để tạo tiền tố đường dẫn ảo (trong đó đường dẫn thực tế không tồn tại trong hệ thống tệp) cho các tệp được phục vụ bởi express. hàm static, hãy chỉ định đường dẫn gắn kết cho thư mục tĩnh như được hiển thị bên dưới:
 app.use('/static', express.static('public'))
 Bây giờ, bạn có thể tải các tập tin có trong thư mục public từ tiền tố /static đường dẫn.
 
@@ -106,3 +106,52 @@ const path = require('path') -> ES5
 
 Trường dùng cái này là khi ta không chạy dự án ở file gốc của nó, hay tức là thư mục chạy file đó vd (app.js)
 không nằm cùng cấp với nơi ta đừng hiện
+
+# Học chuyên sâu + chi tiết
+
+# Chủ đề Routing
+
+# routing nó chính là các điềm cuối nằm sau server /
+
+# GET, PUT, PATCH, DELETE, POST -> các method HTTP của Http và expressjs
+
++, get -> yêu cầu lấy dữ liệu
++, post -> yêu cầu thêm
++, put -> yêu cầu cập nhật toàn bộ data
++, patch -> yêu cầu cập nhật một phần
++, delete -> yêu cầu xoá dữ liệu
++, all -> dữ để lắng nghe tất cả các phương thức nó bao gồm cả (get, put, post, delete, patch...)
+
+# Nếu muốn cấu hình vào ứng dụng expressjs ta dùng app.use()
+
++, Ở trong mỗi phương thức định tuyến hay là routing thì nó đều chứa một hàm xử lý
+
+cú pháp. app.method(path, func)
+Trong đó:
++, app -> thư viện express
++, method -> các phương thức http (GET, PUT, POST, DELETE, PATCH...)
++, path -> đường dẫn (hay còn gọi là điểm cuối)
++, func -> hàm xử lý được gọi khi khớp đường dẫn
+
+/ -> nó đại diện cho root server. 3000 -> chạy local thì / -> localhost:3000
+app.get("/abc", () => {
+
+})
+
++, ở trong mỗi hàm xử lý nó để nhận vào 3 tham số: req, res, next
+=> req -> nó chính là yêu cầu mà người dùng gửi lên
+=> res -> nó chính là phản hồi từ phía server nếu có
+=> next ...
++, Ở trong path
+params: localhost:3000/product/1 -> 1 là prams dùng khi muốn chỉ rõ thông tin mà nó thuộc về
+VD: ở DB ta có lưu 1 bài viết có ID = 1. Khi người ta cần truy cập vào bài viết đó ở trên hệ thống
+localhost:3000/post/1 -> 1 nó là id bài viết nó thể hiện nội dung của nó thuộc về đang là 1
+query: localhost:3000/product?min=30&max=50&size=s -> query thường được dùng khi ta cần lọc dữ liệu và nhận nhiều điều kiện filter
+
+- quy tắc của query là: url?key=value&key=value
+
+params: localhost:3000/post/1 -> params thường dùng để chi rõ tài nguyên đó có tt là gì thường sẽ nhận vào ID
+
+- quy tắc của params là: url/:ten-params
+
+Để lấy được query mà người dùng quyền xuống ta dùng req.query
