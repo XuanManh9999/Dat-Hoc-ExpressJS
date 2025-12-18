@@ -155,3 +155,47 @@ params: localhost:3000/post/1 -> params thường dùng để chi rõ tài nguy�
 - quy tắc của params là: url/:ten-params
 
 Để lấy được query mà người dùng quyền xuống ta dùng req.query
+
+# Trên URL có 2 cái là query(?) và params(:name)
+
+# Ngoài ra còn có body của request
+
+# để dùng được ta thêm
+
+<!-- app.use(express.json()); -->
+
+# Tìm hiểu về RESTful API
+
+RESTful API là một tiêu chuẩn dùng trong việc thiết kế API cho các ứng dụng web (thiết kế Web services) để tiện cho việc quản lý các resource. Nó chú trọng vào tài nguyên hệ thống (tệp văn bản, ảnh, âm thanh, video, hoặc dữ liệu động…), bao gồm các trạng thái tài nguyên được định dạng và được truyền tải qua HTTP.
+
+REST hoạt động chủ yếu dựa vào giao thức HTTP. Các hoạt động cơ bản nêu trên sẽ sử dụng những phương thức HTTP riêng.
+
+GET (SELECT): Trả về một Resource hoặc một danh sách Resource.
+POST (CREATE): Tạo mới một Resource.
+PUT (UPDATE): Cập nhật thông tin cho Resource.
+DELETE (DELETE): Xoá một Resource.
+
+# Status code
+
+200 OK – Trả về thành công cho những phương thức GET, PUT, PATCH hoặc DELETE.
+201 Created – Trả về khi một Resouce vừa được tạo thành công.
+204 No Content – Trả về khi Resource xoá thành công.
+304 Not Modified – Client có thể sử dụng dữ liệu cache.
+400 Bad Request – Request không hợp lệ
+401 Unauthorized – Request cần có chưa được xác thực (đăng nhập sai thông tin).
+403 Forbidden – bị từ chối không cho phép (không có quyền vào).
+404 Not Found – Không tìm thấy resource từ URI
+405 Method Not Allowed – Phương thức không cho phép với user hiện tại.
+410 Gone – Resource không còn tồn tại, Version cũ đã không còn hỗ trợ.
+415 Unsupported Media Type – Không hỗ trợ kiểu Resource này.
+422 Unprocessable Entity – Dữ liệu không được xác thực
+429 Too Many Requests – Request bị từ chối do bị giới hạn
+500 Server error
+502 BAD GETWAY
+
+# Đầu status http cần nhớ
+
+200-299 -> Thành công
+300-399 -> Chuyển hướng
+400-499 -> Phía người dùng
+500-599 -> Lỗi phía server

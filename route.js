@@ -6,13 +6,13 @@ const app = express();
 //   res.send("Hello world Routing");
 // });
 
-app.get("/index.html", (req, res) => {
-  res.send("Mạnh");
-});
+// app.get("/index.html", (req, res) => {
+//   res.send("Mạnh");
+// });
 
-app.all("/tat-ca", (req, res) => {
-  res.send("Đây là method all nó lắng nghe từ tất cả các yêu cầu HTTP");
-});
+// app.all("/tat-ca", (req, res) => {
+//   res.send("Đây là method all nó lắng nghe từ tất cả các yêu cầu HTTP");
+// });
 
 // query
 // app.get("/post", (req, res) => {

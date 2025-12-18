@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "route": "node route.js"
+    "route": "node route.js",
+    "url": "node url.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
