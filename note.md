@@ -199,3 +199,29 @@ DELETE (DELETE): Xoá một Resource.
 300-399 -> Chuyển hướng
 400-499 -> Phía người dùng
 500-599 -> Lỗi phía server
+
+--
+HTTP (HyperText Transfer Protocol - Giao thức Truyền tải Siêu văn bản) là giao thức nền tảng cho World Wide Web, quy định cách thức trình duyệt (client) và máy chủ web (server) trao đổi thông tin, cho phép bạn truy cập trang web, hình ảnh, video, tải xuống tệp tin trên Internet. Nó hoạt động theo cơ chế yêu cầu-phản hồi, nơi trình duyệt gửi yêu cầu và máy chủ gửi lại phản hồi, thường dùng chung với TCP/IP và giờ đây là HTTPS để mã hóa dữ liệu.
+Đặc điểm và cách hoạt động chính:
+Mục đích: Truyền tải dữ liệu siêu văn bản và các tài nguyên khác qua mạng.
+Cơ chế Client-Server: Trình duyệt (client) gửi yêu cầu (request) đến máy chủ, máy chủ xử lý và gửi lại phản hồi (response).
+Nền tảng: Chạy trên nền tảng TCP/IP, thường sử dụng cổng 80, nhưng giờ đây thường dùng kết hợp với TLS/SSL qua HTTPS (cổng 443) để bảo mật.
+Mở rộng: Không chỉ tải văn bản, mà còn xử lý hình ảnh, video, tải lên nội dung (form) và cập nhật trang web.
+Phiên bản: Đã phát triển từ HTTP/1.0, HTTP/1.1, đến HTTP/2, mang lại hiệu suất và tính năng tốt hơn.
+
+# Giải thích cấu trúc thư mục
+
++, routes: Như tên gọi nó sẽ chứa đầy đủ các tuyền đường router của ứng dụng (/dang-nhap), khi client gửi yêu cầu tới, nó sẽ là thằng đứng ra để nhận
++, controllers: thằng bóc tách dữ liệu từ router(từ client gửi xuống query, params, body) + validate nó, sau đó sẽ chuyển cho services xử lý
++, services: nó là thàng xử lý logic và tương tác với csdl dữ liệu, đồng thời phản hồi về dữ liệu cho client
++, public: nó chứa các tài nguyên công khai của ứng dụng (server)
++, utils: là file chưa các hàm dùng chung, hàm dùng nhiều lần trong ứng dụng
+
+# Xử lý biến môi trường với .env
+
+Dotenv là một mô-đun không phụ thuộc vào bất kỳ thư viện nào khác, có chức năng tải các biến môi trường từ một .env tệp tin vào bộ nhớ process.env. Việc lưu trữ cấu hình trong môi trường tách biệt với mã nguồn dựa trên phương pháp luận của Mô hình Ứng dụng Mười Hai Yếu tố (The Twelve-Factor App ).
+
++, dotenv là thư viện dùng để cấu hình các dữ liệu quan trong, các biến môi trường.
++, để ấy các dữ liệu ra ta cần 2 bước.
++, Bước 1: import "dotenv/config";
++, Bước 2: process.env.TEN_BIEN_MOI_TRUONG dữ liệu bên này mặc định là 1 chuỗi
