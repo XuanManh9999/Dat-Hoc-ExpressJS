@@ -225,3 +225,9 @@ Dotenv là một mô-đun không phụ thuộc vào bất kỳ thư viện nào 
 +, để ấy các dữ liệu ra ta cần 2 bước.
 +, Bước 1: import "dotenv/config";
 +, Bước 2: process.env.TEN_BIEN_MOI_TRUONG dữ liệu bên này mặc định là 1 chuỗi
+
+# Luồng ứng dụng chạy theo chuẩn MVC
+
+# Client (front-end) -> gửi yêu cầu -> server tiếp nhận
+
+# Người dùng gửi YC gì đó.. -> router (đón nhận yêu cầu) -> chuyển controller để validate, đọc req -> servers để xử lý dữ liệu rồi phản hồi về

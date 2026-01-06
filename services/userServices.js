@@ -1,55 +1,108 @@
-const data = [
-  {
-    id: 1,
-    username: "nguyenvana",
-    fullName: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    phone: "0901234567",
-    role: "USER",
-    status: "ACTIVE",
-    createdAt: "2025-01-10T08:30:00Z",
-  },
-  {
-    id: 2,
-    username: "tranthib",
-    fullName: "Trần Thị B",
-    email: "tranthib@gmail.com",
-    phone: "0912345678",
-    role: "ADMIN",
-    status: "ACTIVE",
-    createdAt: "2025-01-12T09:15:00Z",
-  },
-  {
-    id: 3,
-    username: "lehoangc",
-    fullName: "Lê Hoàng C",
-    email: "lehoangc@gmail.com",
-    phone: "0923456789",
-    role: "TEACHER",
-    status: "INACTIVE",
-    createdAt: "2025-01-15T14:45:00Z",
-  },
-];
+import e from "express";
+import pool from "../datatabse/connectorDB.js";
 
-const handleGetAllDataUser = (name, role) => {
-  if (name && role) {
-    const user = data.find(
-      (item) => item.username == name && item.role == role
-    );
-    return user;
-  } else if (name) {
-    const user = data.find((item) => item.username == name);
-    return user;
-  } else if (role) {
-    const user = data.find((item) => item.role == role);
-    return user;
+const handleGetAllDataUser = async (name) => {
+  try {
+    let query = `select * from users `;
+    if (name) {
+      query += `where username = '${name}'`;
+    }
+    const [data, _] = await pool.query(query);
+    return {
+      status: 200,
+      message: "Lấy người dùng thành công",
+      data: data,
+    };
+  } catch (err) {
+    throw err;
   }
-  return data;
 };
 
-const handleCreateUser = (bodyUser) => {
-  data.push(bodyUser);
-  return data;
+const handleCreateUser = async (bodyUser) => {
+  try {
+    // For pool initialization, see above
+    const [rows, _] = await pool.query(
+      `INSERT INTO users (username, age, address, price) VALUES('${bodyUser?.username}', ${bodyUser?.age}, '${bodyUser.address}', ${bodyUser.price});`
+    );
+    // nếu có sự thay đổi các bản ghi bên trong nó sẽ là 1
+    // không có sự thay đổi bản ghi trong DB nó trả về 0
+    if (rows?.affectedRows == 1) {
+      return {
+        status: 201,
+        message: "Thêm người dùng thành công",
+      };
+    } else {
+      return {
+        status: 500,
+        message: "Thêm người dùng thất bại, vui lòng thử lại sau",
+      };
+    }
+
+    // Connection is automatically released when query resolves
+  } catch (err) {
+    throw err; // ném lỗi về, và bên nhận mặc định code sẽ luôn luôn vào catch nếu dùng try-catch
+  }
 };
 
-export { handleGetAllDataUser, handleCreateUser };
+const handleUpdateUser = async (user, username) => {
+  try {
+    let queryUpdate = `UPDATE users SET `;
+    const { age, address, price } = user;
+    if (age) {
+      queryUpdate += ` age = ${age}, `;
+    }
+    if (address) {
+      queryUpdate += ` address = '${address}', `;
+    }
+    if (price) {
+      queryUpdate += ` price = ${price} `;
+    }
+    queryUpdate += ` where username = '${username}' `;
+
+    const [rows, _] = await pool.query(queryUpdate);
+    if (rows.affectedRows == 1) {
+      return {
+        status: "200",
+        message: "Cập nhật user thành công",
+      };
+    } else {
+      return {
+        status: "500",
+        message: "Cập nhật user không thành công. Vui lòng thử lại sau",
+      };
+    }
+  } catch (err) {
+    console.log("err", err);
+    throw err;
+  }
+};
+
+const handleDeleteUser = async (username) => {
+  try {
+    const [rows, _] = await pool.query(
+      `delete from users where username = '${username}'`
+    );
+    if (rows.affectedRows == 1) {
+      return {
+        status: "200",
+        message: "Xoá user thành công",
+      };
+    } else {
+      return {
+        status: "500",
+        message: "Xoá user thất bại, vui lòng thử lại sau",
+      };
+    }
+  } catch (err) {
+    console.log("err", err);
+    throw err;
+  }
+};
+
+export {
+  handleGetAllDataUser,
+  handleCreateUser,
+  handleUpdateUser,
+  handleDeleteUser,
+};
+// Quản trị khi thêm nhân viên thì bắt 2 trường là, usename và age. Trương address không bắt được, số tiền cũng bắt buộc. Nếu không nhập đủ thì không cho thêm và phản hồi về yêu cầu quản trị nhập đầy đủ thông tin
