@@ -2,8 +2,8 @@ import express from "express";
 import {
   getAllUser,
   createUser,
-    updateUser,
-    deleteUser
+  updateUser,
+  deleteUser,
 } from "../controllers/userController.js";
 
 const routerUser = express.Router(); // tạo ra một router con (router sub)
@@ -16,6 +16,5 @@ routerUser.post("/user", createUser);
 
 routerUser.patch("/user/:username", updateUser);
 
-
-routerUser.delete("/user/:username", deleteUser)
+routerUser.delete("/user/:username", deleteUser);
 export default routerUser;
