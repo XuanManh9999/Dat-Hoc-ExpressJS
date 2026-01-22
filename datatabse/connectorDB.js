@@ -7,7 +7,7 @@ const pool = mysql.createPool({
   database: "mysql2",
   password: "toilamanhdevhust",
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: 10,// Tối đa 10 kết nối MySQL cùng lúc
   maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
   idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
   queueLimit: 0,
@@ -118,6 +118,7 @@ async function testConnection() {
 // Lấy người dùng đó
 // thực hiện update
 // lưu lại
+// dùng câu lệnh update thẳng và kèm where
 // const updateAgeUserByName = async (name, age) => {
 //   // orm
 //   // const [result] = await pool.query("select * from users where username = ?", [
@@ -152,3 +153,101 @@ async function testConnection() {
 // };
 
 // deleteUsersByUsername("Nguyễn Xuân Mạnh");
+
+
+// PHẦN 6 – PREPARED STATEMENTS (BẢO MẬT)
+// SQL Injection
+// dat@gmail.com -> string. dat@gmail.com + ' or 1 = 1' -> dat@gmail.com or 1 = 1
+// const sql = "SELECT * FROM users WHERE email = '" + email + "'";
+// SELECT * FROM users WHERE email = 'dat@gmail.com' -> hợp lệ
+// SELECT * FROM users WHERE email = 'dat@gmail.com' OR 1=1
+// SELECT * FROM users
+// Lộ toàn bộ dữ liệu
+// khắc phục nó bằng các không dùng nối chuỗi nữa
+
+// const [rows] = await pool.execute(
+//   'SELECT * FROM users WHERE email = ?',
+//   ['test@gmail.com']
+// );
+
+// nếu ta tương tác với dữ liệu động thì ta dùng Luôn dùng execute() cho dữ liệu động
+
+// const insertUsers = async (user) => {
+//   const [result] = await pool.execute("insert into users (username, age, address, price) values (?, ?, ?, ?)", ["Loan", 20, 'ABC', 2000])
+//   if (result.affectedRows != 0) {
+//     console.log("Thêm thành công")
+//   }else {
+//     console.log("Thêm người dùng thất bại")
+//   }
+// }
+// insertUsers()
+
+
+// PHẦN 8 – TRANSACTION (AN TOÀN DỮ LIỆU, TOÀN VẸN DỮ LIỆU) 
+// 🎯 Mục tiêu: Không mất tiền, không mất dữ liệu
+
+// 1 -> OK 
+// 2 -> OK
+// 3 -> ERROR -> không thêm cái nào
+
+// const handlePayment = async () => {
+//   const conn = await pool.getConnection();
+// try {
+//   await conn.beginTransaction();// mở Transaction
+
+//   await conn.execute(
+//     'UPDATE users SET price = ? WHERE username = ?',
+//     [2000, 'Loan']
+//   );
+
+//   await conn.execute(
+//     'UPDATE payment SET price = ? WHERE name = ?',
+//     [2000, 'Loan']
+//   );
+
+//   await conn.commit(); // xác nhận và gửi yêu cầu lưu vào csdl 
+//   console.log('Chuyển tiền thành công');
+// } catch (err) {
+//   await conn.rollback(); // quay trở lại trạng thái trước khi mở Transaction
+//   console.log('Lỗi, đã rollback');
+// } finally {
+//   conn.release(); // đóng  kết nối tạo phiên mới
+// }
+// }
+// handlePayment()
+
+
+// fake db payment
+// const handleFakeData = async () => {
+//   for (let i  = 1; i <= 100; i++) {
+//     await pool.execute("insert into payment (name, price, name_revice) values(?, ?, ?)", [`Nguyễn Văn ${i}`, Math.floor(Math.random() * 100), 'Mạnh'])
+//   }
+//   console.log("Thêm thành công")
+// }
+// handleFakeData()
+// PHẦN 10 – PAGINATION (PHÂN TRANG)
+
+// LIMIT (số lượng bản ghi trả về) + OFFSET (bỏ qua bao nhiêu bản ghi trước đó) 
+// yêu cầu: mỗi 1 trang có chứa 10 sản phẩm; (limit = 10)
+// page(trang) 1 
+// offset = (page - 1) * limit -> 1 - 1 = 0 * 10 -> 0 -> bỏ qua 0 bản ghi
+// page: 2
+// 1 * 10 -> 10 -> bỏ qua qua 10 bản ghi kết tiếp
+// -- select * from users
+// -- trang 1 -> limit 10
+// -- offset = (page - 1) * limit
+// -- select * from payment p limit 10 offset 0
+// -- trang 2 -> limit 10
+// -- select * from payment p limit 10  offset 10
+// -- trang 3 -> limit 10
+// -- select * from payment p limit 10 offset 20
+
+const getAllPayments = async (page = 1) => {
+  const limit = 10
+  const offset = (page - 1) * limit
+  console.log(limit, offset)
+  const [result] = await pool.query("select * from payment p limit ? offset ?", [limit, offset])
+  console.log(result)
+}
+
+getAllPayments(2)
