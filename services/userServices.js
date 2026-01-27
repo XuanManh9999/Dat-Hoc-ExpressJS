@@ -1,4 +1,3 @@
-import e from "express";
 import pool from "../datatabse/connectorDB.js";
 
 const handleGetAllDataUser = async (name) => {

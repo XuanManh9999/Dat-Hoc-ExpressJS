@@ -21,6 +21,8 @@ async function testConnection() {
   console.log("Kết nối OK:", rows);
 }
 
+
+export default pool;
 // testConnection();
 
 // select dữ liệu
@@ -156,7 +158,7 @@ async function testConnection() {
 
 
 // PHẦN 6 – PREPARED STATEMENTS (BẢO MẬT)
-// SQL Injection
+// SQL Injection *
 // dat@gmail.com -> string. dat@gmail.com + ' or 1 = 1' -> dat@gmail.com or 1 = 1
 // const sql = "SELECT * FROM users WHERE email = '" + email + "'";
 // SELECT * FROM users WHERE email = 'dat@gmail.com' -> hợp lệ
@@ -242,12 +244,27 @@ async function testConnection() {
 // -- trang 3 -> limit 10
 // -- select * from payment p limit 10 offset 20
 
-const getAllPayments = async (page = 1) => {
-  const limit = 10
-  const offset = (page - 1) * limit
-  console.log(limit, offset)
-  const [result] = await pool.query("select * from payment p limit ? offset ?", [limit, offset])
-  console.log(result)
-}
+// const getAllPayments = async (page = 1) => {
+//   const limit = 10
+//   const offset = (page - 1) * limit
+//   console.log(limit, offset)
+//   const [result] = await pool.query("select * from payment p limit ? offset ?", [limit, offset])
+//   console.log(result)
+// }
 
-getAllPayments(2)
+// getAllPayments(2)
+
+// anh cần làm phân trang. Mỗi trang anh cần view 10sp ??
+// limit = 10; offset = 0 -> trang 1
+// limit = 10; offset = (2 - 1) * limit = 10
+// limit = 10; offset = (3 - 1) * limit = 20
+
+
+
+
+
+
+
+
+
+// Buổi sau học JWT (xác thực và phân quyền)
