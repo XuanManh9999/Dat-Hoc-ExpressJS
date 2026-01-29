@@ -1,6 +1,7 @@
 import pool from "../datatabse/connectorDB.js";
 import bcrypt from "bcrypt";
-
+// var jwt = require('jsonwebtoken'); // es5
+import jwt from "jsonwebtoken" // es6
 
 const handleCreateAccount = async (username, password, phone) => {
     // kiểm tra người dùng đó có trong db chưa?
@@ -57,10 +58,29 @@ const handleLogin = async (username, password) => {
         }
     }
 
+
+    // Dùng jwt thì đoạn này, thay vì trả về thông tin người dùng thì ta sẽ trả về cho client token
+    // jwt.sign(payload, signature, { algorithm: "none"; })
+
+    // lưu ý ở payload ta không truy các thông tin nhậy cảm như password, mã ngân hàng... Vì nếu có những thông tin đó trong này thì hacker có thể đọc được và sử dụng nó trái
+    console.log("user.id", user[0].id)
+    console.log("username",user[0].username)
+    
+    const token =  jwt.sign(    
+    {
+        userId: user[0].id,
+        username: user[0].username,
+        roleId: user[0].role_id
+    }, 
+    process.env.SIGNATURE, // lộ ra thì hacker có thể fake token gây nguy hiểm tới hệ thống
+    {algorithm: "HS256",  expiresIn: 60 * 60 + 600})
+
+    // 60 * 60  -> giây = 3600(s) / 60 = 60'
+
     return {
         "status": 200,
         "message": "Đăng nhập thành công",
-        "data": user
+        "token": token 
     }
 
 }
