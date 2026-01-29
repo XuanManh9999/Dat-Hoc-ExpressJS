@@ -46,6 +46,7 @@ const handleLogin = async (username, password) => {
         }
     }
     // check xem có khớp mật khẩu ko trả về true false
+    // passs == user[0].password
     const match = await bcrypt.compare(password, user[0].password);
 
     console.log("match: ", match)
