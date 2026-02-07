@@ -14,7 +14,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJIVVlMUSIsInVzZXJfaWQiOjQ2NCwicm9
 
 
 Cách hoạt động
-Đăng nhập: Người dùng gửi thông tin đăng nhập. Server xác thực và tạo một JWT.
+Đăng nhập: Người dùng gửi thông tin đăng nhập. Server xác thực và tạo một JWT. -> OK 
 Truyền tải: Server gửi JWT về lại client. Client lưu trữ token này (thường ở localStorage hoặc cookie).
 Xác thực: Trong các yêu cầu tiếp theo, client gửi kèm JWT (thông qua Authorization: Bearer <token>). Server kiểm tra signature của JWT để xác thực mà không cần tra cứu cơ sở dữ liệu. 
 Ưu điểm
@@ -35,3 +35,11 @@ Phân quyền người dùng (Authorization).
 
 // md
 Front-end -> md -> Backend -> CSDL
+
+login -> token -> giao diện (lưu lại).
+
+VD: Lấy tất cả lịch sử mua hàng của người dùng.
+
+Luồng: Lấy token đã lưu gửi về cho server để server check rồi có quyết định phản hồi thông tin đó không?
+
+

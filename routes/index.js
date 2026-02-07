@@ -1,8 +1,11 @@
 import routerUser from "./users.js";
 import routerAuth from "./auth.js"
 
+import {verifyToken} from "../md/verify_jwt.js"
+
 const appRouter = (expressjs) => {
-  expressjs.use(routerUser);
+  // cách 2 dùng jwt md để verify token
+  expressjs.use(verifyToken, routerUser);
   expressjs.use(routerAuth);
 };
 

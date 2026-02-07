@@ -6,6 +6,9 @@ import {
 } from "../services/userServices.js";
 // hàm getAllUser
 const getAllUser = async (req, res) => {
+
+  console.log("Check user", req.user)
+
   // localhost:3000/users?name=Mạnh&age=30
   const query = req.query; // {name: "Mạnh", role: "USER"}
   // console.log("query", query);
